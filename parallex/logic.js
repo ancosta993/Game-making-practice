@@ -4,6 +4,7 @@ const ctx = canvas.getContext('2d');
 const CANVAS_WIDTH = canvas.width = 800;
 const CANVAS_HEIGHT = canvas.height = 700;
 let gameSpeed = 5; // need for controlling scrolling speed.
+// let gameFrame = 0;
 
 //load the images;
 const backgroundLayer1 = new Image();
@@ -17,6 +18,7 @@ backgroundLayer4.src = './backgroundLayers/layer-4.png';
 const backgroundLayer5 = new Image();
 backgroundLayer5.src = './backgroundLayers/layer-5.png';
 
+window.addEventListener('load', function(){
 const slider = document.getElementById('slider');
 slider.value = gameSpeed;
 const showGameSpeed = document.getElementById('showGameSpeed');
@@ -32,7 +34,6 @@ class Layer {
       this.y = 0;
       this.width = 2400;
       this.height = 700;
-      this.x2 = this.width;
       this.image = image;
       this.speedModifier = speedModifier;
       this.speed = gameSpeed * this.speedModifier;
@@ -41,18 +42,14 @@ class Layer {
    update(){
       this.speed = gameSpeed * this.speedModifier;
       if (this.x <= -this.width) {
-         this.x = this.width + this.x2 - this.speed;
-      } 
-      if (this.x2 <= -this.width) {
-         this.x2 = this.width + this.x - this.speed;
+         this.x = 0;
       }
 
-      this.x = Math.floor(this.x - this.speed);
-      this.x2 = Math.floor(this.x2 - this.speed);
+      this.x = this.x - this.speed
    }
    draw(){
       ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-      ctx.drawImage(this.image, this.x2, this.y, this.width, this.height);
+      ctx.drawImage(this.image, this.x + this.width, this.y, this.width, this.height);
    }
 }
 
@@ -71,8 +68,10 @@ function animate(){
       object.update();
       object.draw();
    })
-   
+   // gameFrame--;
    requestAnimationFrame(animate);
 }
 
 animate();
+})
+
